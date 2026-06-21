@@ -42,7 +42,7 @@ export default function AdminDashboard() {
 
   const loadChats = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/admin/chats')
+      const res = await fetch('https://salonproj-production.up.railway.app/api/admin/chats')
       if (res.ok) {
         const data = await res.json()
         setChatRooms(data)
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
     if (!replyText.trim() || !selectedChat) return
     setSendingReply(true)
     try {
-      const res = await fetch('http://localhost:8000/api/chat/staff', {
+      const res = await fetch('https://salonproj-production.up.railway.app/api/chat/staff', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

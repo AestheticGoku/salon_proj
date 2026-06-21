@@ -34,7 +34,7 @@ export default function AIAdvisor() {
     setIsLoading(true)
     setStep(4) // Move to results step but show loading
     try {
-      const response = await fetch('http://localhost:8000/api/ai-consultation', {
+      const response = await fetch('https://salonproj-production.up.railway.app/api/ai-consultation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

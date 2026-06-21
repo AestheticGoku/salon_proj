@@ -64,7 +64,7 @@ export default function ChatDrawer({ isOpen, onClose }) {
   const fetchStaffMessages = async () => {
     if (!user) return
     try {
-      const response = await fetch(`http://localhost:8000/api/chat/staff?userId=${user.id}`)
+      const response = await fetch(`https://salonproj-production.up.railway.app/api/chat/staff?userId=${user.id}`)
       if (response.ok) {
         const data = await response.json()
         setStaffMessages(data)
@@ -90,7 +90,7 @@ export default function ChatDrawer({ isOpen, onClose }) {
       setIsAiLoading(true)
 
       try {
-        const response = await fetch('http://localhost:8000/api/chat/ai', {
+        const response = await fetch('https://salonproj-production.up.railway.app/api/chat/ai', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: textToSend })
@@ -121,7 +121,7 @@ export default function ChatDrawer({ isOpen, onClose }) {
       }, 1000)
 
       try {
-        const response = await fetch('http://localhost:8000/api/chat/staff', {
+        const response = await fetch('https://salonproj-production.up.railway.app/api/chat/staff', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
