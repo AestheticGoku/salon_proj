@@ -28,14 +28,27 @@ export default function ChatDrawer({ isOpen, onClose }) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  // Blur any focused element when drawer opens to prevent keyboard from opening
+  // and browser from scrolling to the input
   useEffect(() => {
     if (isOpen) {
-      scrollToBottom()
-      if (activeTab === 'staff' && user) {
-        fetchStaffMessages()
-      }
+      document.activeElement?.blur()
     }
-  }, [isOpen, activeTab, aiMessages, staffMessages, isStaffTyping])
+  }, [isOpen])
+
+  // Fetch staff messages when tab/open state changes
+  useEffect(() => {
+    if (isOpen && activeTab === 'staff' && user) {
+      fetchStaffMessages()
+    }
+  }, [isOpen, activeTab])
+
+  // Scroll to bottom only when new messages arrive, not on initial open
+  useEffect(() => {
+    const isInitialAiMessage = activeTab === 'ai' && aiMessages.length === 1
+    if (isInitialAiMessage) return
+    scrollToBottom()
+  }, [aiMessages, staffMessages, isStaffTyping])
 
   // Periodic poll for staff chat
   useEffect(() => {
@@ -73,7 +86,6 @@ export default function ChatDrawer({ isOpen, onClose }) {
     setInputText('')
 
     if (activeTab === 'ai') {
-      // Append user message
       setAiMessages(prev => [...prev, { sender: 'user', message: textToSend }])
       setIsAiLoading(true)
 
@@ -96,17 +108,14 @@ export default function ChatDrawer({ isOpen, onClose }) {
         isSendingRef.current = false
       }
     } else {
-      // 1-to-1 Staff Chat (User must be logged in)
       if (!user) {
         isSendingRef.current = false
         return
       }
 
-      // Append user message immediately locally for responsiveness
       const tempUserMsg = { sender: 'user', message: textToSend, timestamp: new Date().toISOString() }
       setStaffMessages(prev => [...prev, tempUserMsg])
 
-      // Simulate typing indicator while waiting for the background reply
       setTimeout(() => {
         setIsStaffTyping(true)
       }, 1000)
@@ -139,7 +148,7 @@ export default function ChatDrawer({ isOpen, onClose }) {
     <div className="chat-drawer-overlay open" onClick={(e) => {
       if (e.target.classList.contains('chat-drawer-overlay')) onClose()
     }}>
-      <div className="chat-drawer">
+      <div className="chat-drawer" onTouchStart={(e) => e.stopPropagation()}>
         <div className="chat-drawer-header">
           <h3>Kesari <span>Concierge</span></h3>
           <button className="cart-close" onClick={onClose} style={{ color: 'var(--ivory)' }}>×</button>
@@ -162,7 +171,6 @@ export default function ChatDrawer({ isOpen, onClose }) {
 
         <div className="chat-messages-area">
           {activeTab === 'ai' ? (
-            // AI Messages Rendering
             aiMessages.map((msg, index) => (
               <div className={`chat-bubble ${msg.sender}`} key={index}>
                 {msg.sender === 'bot' && <span className="chat-bubble-sender">AI Concierge</span>}
@@ -170,7 +178,6 @@ export default function ChatDrawer({ isOpen, onClose }) {
               </div>
             ))
           ) : (
-            // Staff Messages Rendering
             !user ? (
               <div className="chat-system-notification" style={{ marginTop: '4rem' }}>
                 <span style={{ fontSize: '2rem', display: 'block', marginBottom: '1rem' }}>🔒</span>
@@ -217,11 +224,11 @@ export default function ChatDrawer({ isOpen, onClose }) {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Chat input block */}
         {(activeTab === 'ai' || user) && (
           <form className="chat-input-bar" onSubmit={handleSend}>
             <input 
-              type="text" 
+              type="text"
+              autoFocus={false}
               placeholder={activeTab === 'ai' ? "Ask about treatments, prices, hours..." : "Message spa staff..."}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}

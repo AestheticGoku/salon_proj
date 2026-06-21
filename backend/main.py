@@ -8,9 +8,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
-from .database import engine, Base, get_db, SessionLocal
-from . import models, schemas
-from .ai_advisor import generate_prescription
+from database import engine, Base, get_db, SessionLocal
+import models, schemas
+from ai_advisor import generate_prescription
 
 try:
     import google.generativeai as genai
@@ -78,7 +78,7 @@ CRITICAL STOCKS, INVENTORY, & RECOMMENDATION CONSTRAINT:
 Only answer queries related to the salon, wellness, bookings, products, and Udaipur tourism. If a guest asks a generic or unrelated question (e.g. coding, math, general knowledge), politely decline and state that you are only trained to assist with Kesari Atelier spa and salon inquiries.
 """
 
-# Load environment variables from .env file if it exists
+# Load environment variables from env file if it exists
 if os.path.exists(".env"):
     with open(".env") as f:
         for line in f:
