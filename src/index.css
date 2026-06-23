@@ -1301,7 +1301,7 @@ nav.desktop-nav {
 /* AI CONSULTANT WIZARD */
 .ai-advisor-btn {
   position: fixed;
-  bottom: 80px;
+  bottom: calc(80px + var(--safe-area-bottom));
   right: 12px;
   z-index: 90;
   background: var(--charcoal);
@@ -2077,7 +2077,7 @@ footer {
 /* CHAT CONCIERGE BUTTON */
 .chat-concierge-btn {
   position: fixed;
-  bottom: 80px;
+  bottom: calc(80px + var(--safe-area-bottom));
   left: 12px;
   z-index: 90;
   background: var(--gold);

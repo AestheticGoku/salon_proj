@@ -3,10 +3,14 @@ import hashlib
 import secrets
 import os
 import time
+import sys
 from fastapi import FastAPI, Depends, HTTPException, status, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List, Optional
+
+# Add the directory containing this file to the python module search path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from database import engine, Base, get_db, SessionLocal
 import models, schemas
