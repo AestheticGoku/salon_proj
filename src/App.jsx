@@ -564,22 +564,14 @@ export default function App() {
         {gateVisible && (
           <div className={`fort-gate-overlay ${gateStatus}`}>
             <div className="gate-door gate-door-left">
-              <div className="gate-studs-grid">
-                {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
-              </div>
               <div className="gate-medallion">
                 <span className="gate-initial-letter left-initial">K</span>
               </div>
-              <div className="gate-handle-ring"></div>
             </div>
             <div className="gate-door gate-door-right">
-              <div className="gate-studs-grid">
-                {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
-              </div>
               <div className="gate-medallion">
                 <span className="gate-initial-letter right-initial">A</span>
               </div>
-              <div className="gate-handle-ring"></div>
             </div>
           </div>
         )}
@@ -828,22 +820,14 @@ export default function App() {
       {gateVisible && (
         <div className={`fort-gate-overlay ${gateStatus}`}>
           <div className="gate-door gate-door-left">
-            <div className="gate-studs-grid">
-              {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
-            </div>
             <div className="gate-medallion">
               <span className="gate-initial-letter left-initial">K</span>
             </div>
-            <div className="gate-handle-ring"></div>
           </div>
           <div className="gate-door gate-door-right">
-            <div className="gate-studs-grid">
-              {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
-            </div>
             <div className="gate-medallion">
               <span className="gate-initial-letter right-initial">A</span>
             </div>
-            <div className="gate-handle-ring"></div>
           </div>
         </div>
       )}

@@ -3021,17 +3021,13 @@ footer {
 .gate-door {
   width: 50%;
   height: 100%;
-  background-color: #0c0b0a;
-  background-image: 
-    repeating-linear-gradient(45deg, rgba(223, 179, 78, 0.04) 0px, rgba(223, 179, 78, 0.04) 1px, transparent 1px, transparent 20px),
-    repeating-linear-gradient(-45deg, rgba(223, 179, 78, 0.04) 0px, rgba(223, 179, 78, 0.04) 1px, transparent 1px, transparent 20px),
-    radial-gradient(circle at center, #1b1916 0%, #0d0c0a 100%);
-  border-bottom: 15px solid #2a251e;
+  background: linear-gradient(135deg, #fbf7eb 0%, #d4af37 40%, #b8923e 70%, #ebd07b 100%);
+  border-bottom: 15px solid #8e6c13;
   position: relative;
   display: flex;
   flex-direction: column;
   transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
-  box-shadow: inset 0 0 100px rgba(0,0,0,0.95);
+  box-shadow: inset 0 0 50px rgba(0,0,0,0.15), 0 0 20px rgba(212,175,55,0.1);
   transform: rotateY(0deg);
   transform-style: preserve-3d;
   backface-visibility: hidden;
@@ -3042,9 +3038,9 @@ footer {
   position: absolute;
   top: 6%;
   bottom: 6%;
-  border: 1.5px solid rgba(223, 179, 78, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   pointer-events: none;
-  box-shadow: 0 0 15px rgba(223, 179, 78, 0.1);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
 }
 
 .gate-door-left::after {
@@ -3060,12 +3056,12 @@ footer {
 }
 
 .gate-door-left {
-  border-right: 4px solid var(--gold);
+  border-right: 3px solid #8e6c13;
   transform-origin: left center;
 }
 
 .gate-door-right {
-  border-left: 4px solid var(--gold);
+  border-left: 3px solid #8e6c13;
   transform-origin: right center;
 }
 
@@ -3107,9 +3103,9 @@ footer {
   top: 50%;
   width: 150px;
   height: 300px;
-  border: 3px double var(--gold);
+  border: 3px double #ebd07b;
   transform: translateY(-50%);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3123,7 +3119,7 @@ footer {
   border-top-left-radius: 150px;
   border-bottom-left-radius: 150px;
   border-right: none;
-  background: radial-gradient(circle at 100% 50%, #24221d 0%, #0e0d0c 70%, #181715 100%);
+  background: radial-gradient(circle at 100% 50%, #201f1d 0%, #151413 80%, #201f1d 100%);
 }
 
 .gate-door-right .gate-medallion {
@@ -3131,7 +3127,7 @@ footer {
   border-top-right-radius: 150px;
   border-bottom-right-radius: 150px;
   border-left: none;
-  background: radial-gradient(circle at 0% 50%, #24221d 0%, #0e0d0c 70%, #181715 100%);
+  background: radial-gradient(circle at 0% 50%, #201f1d 0%, #151413 80%, #201f1d 100%);
 }
 
 .gate-medallion::after {
@@ -3427,8 +3423,8 @@ footer {
   font-family: 'Cormorant Garamond', serif;
   font-size: 5.5rem;
   font-weight: 300;
-  color: var(--gold);
-  text-shadow: 0 0 20px rgba(223, 179, 78, 0.5);
+  color: #ebd07b;
+  text-shadow: 0 0 20px rgba(235, 208, 123, 0.4);
   line-height: 1;
   position: absolute;
   top: 50%;
