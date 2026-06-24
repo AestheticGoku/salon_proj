@@ -401,13 +401,26 @@ export default function App() {
   const [isChatOpen, setChatOpen] = useState(false)
   const [mobile, setMobile] = useState(isMobileDevice())
 
-  const handleEnterPalace = () => {
-    setGateStatus('opened')
-    sessionStorage.setItem('kesari_gate_opened', 'true')
-    setTimeout(() => {
+  useEffect(() => {
+    if (sessionStorage.getItem('kesari_gate_opened') !== 'true') {
+      const openTimer = setTimeout(() => {
+        setGateStatus('opened')
+        sessionStorage.setItem('kesari_gate_opened', 'true')
+      }, 500)
+
+      const hideTimer = setTimeout(() => {
+        setGateVisible(false)
+      }, 2300)
+
+      return () => {
+        clearTimeout(openTimer)
+        clearTimeout(hideTimer)
+      }
+    } else {
+      setGateStatus('opened')
       setGateVisible(false)
-    }, 1800)
-  }
+    }
+  }, [])
 
   useEffect(() => {
     const onResize = () => setMobile(isMobileDevice())
@@ -573,9 +586,9 @@ export default function App() {
               </div>
               <h2>KESARI ATELIER</h2>
               <p>Udaipur Heritage Spa & Salon</p>
-              <button className="gate-enter-btn" onClick={handleEnterPalace}>
-                Enter the Palace
-              </button>
+              <div style={{ color: 'var(--gold)', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '1rem', animation: 'pulseGold 2s infinite alternate' }}>
+                Opening the Palace Gates...
+              </div>
             </div>
           </div>
         )}
@@ -645,7 +658,7 @@ export default function App() {
       ) : (
         <main className="view-container">
           <section className="arch-hero-frame">
-            <div style={{ animation: 'fadeIn 1s ease' }}>
+            <div className="hero-glass-container" style={{ animation: 'fadeIn 1s ease' }}>
               <span className="hero-ornament">City of Lakes · Udaipur, Rajasthan</span>
               <h1>Where <em>Heritage</em><br />Meets Ritual</h1>
               <p className="hero-sub" style={{ color: 'rgba(250,248,243,0.85)' }}>Luxury spa sanctuaries, heritage salon artistry, and elite bridal ceremonies — curated for the discerning.</p>
@@ -841,9 +854,9 @@ export default function App() {
             </div>
             <h2>KESARI ATELIER</h2>
             <p>Udaipur Heritage Spa & Salon</p>
-            <button className="gate-enter-btn" onClick={handleEnterPalace}>
-              Enter the Palace
-            </button>
+            <div style={{ color: 'var(--gold)', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '1rem', animation: 'pulseGold 2s infinite alternate' }}>
+              Opening the Palace Gates...
+            </div>
           </div>
         </div>
       )}
