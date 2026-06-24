@@ -3020,13 +3020,17 @@ footer {
 .gate-door {
   width: 50%;
   height: 100%;
-  background: linear-gradient(135deg, #181715 0%, #0a0908 100%);
+  background-color: #0c0b0a;
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(223, 179, 78, 0.04) 0px, rgba(223, 179, 78, 0.04) 1px, transparent 1px, transparent 20px),
+    repeating-linear-gradient(-45deg, rgba(223, 179, 78, 0.04) 0px, rgba(223, 179, 78, 0.04) 1px, transparent 1px, transparent 20px),
+    radial-gradient(circle at center, #1b1916 0%, #0d0c0a 100%);
   border-bottom: 15px solid #2a251e;
   position: relative;
   display: flex;
   flex-direction: column;
-  transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
-  box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+  transition: transform 2.2s cubic-bezier(0.77, 0, 0.175, 1);
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.95);
 }
 
 .gate-door::after {
@@ -3034,8 +3038,9 @@ footer {
   position: absolute;
   top: 6%;
   bottom: 6%;
-  border: 1px solid rgba(223, 179, 78, 0.25);
+  border: 1.5px solid rgba(223, 179, 78, 0.35);
   pointer-events: none;
+  box-shadow: 0 0 15px rgba(223, 179, 78, 0.1);
 }
 
 .gate-door-left::after {
@@ -3072,32 +3077,97 @@ footer {
 }
 
 .gate-stud {
-  width: 14px;
-  height: 14px;
-  background: radial-gradient(circle at 30% 30%, var(--gold-light), var(--gold-dark));
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle at 35% 35%, #fffda0 0%, var(--gold) 45%, var(--gold-dark) 100%);
   border-radius: 50%;
   margin: auto;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset -1px -1px 3px rgba(0,0,0,0.5);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.6), inset -1px -1px 3px rgba(0,0,0,0.5), 0 0 8px rgba(223,179,78,0.25);
+  position: relative;
+}
+
+.gate-stud::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 4px; height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 4px #fff;
+}
+
+/* Royal Sunburst Medallion Split */
+.gate-medallion {
+  position: absolute;
+  top: 50%;
+  width: 150px;
+  height: 300px;
+  border: 3px double var(--gold);
+  transform: translateY(-50%);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+.gate-door-left .gate-medallion {
+  right: -2px;
+  border-top-left-radius: 150px;
+  border-bottom-left-radius: 150px;
+  border-right: none;
+  background: radial-gradient(circle at 100% 50%, #24221d 0%, #0e0d0c 70%, #181715 100%);
+}
+
+.gate-door-right .gate-medallion {
+  left: -2px;
+  border-top-right-radius: 150px;
+  border-bottom-right-radius: 150px;
+  border-left: none;
+  background: radial-gradient(circle at 0% 50%, #24221d 0%, #0e0d0c 70%, #181715 100%);
+}
+
+.gate-medallion::after {
+  content: '☀';
+  font-size: 5rem;
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(223, 179, 78, 0.7);
+  line-height: 1;
+  font-family: 'Cormorant Garamond', serif;
+  opacity: 0.9;
+}
+
+.gate-door-left .gate-medallion::after {
+  transform: translateX(25px);
+}
+
+.gate-door-right .gate-medallion::after {
+  transform: translateX(-25px);
 }
 
 /* Traditional Brass Ring Handles */
 .gate-handle-ring {
   position: absolute;
   top: 50%;
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   border: 5px solid var(--gold);
   border-radius: 50%;
   transform: translateY(-50%);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+  z-index: 10;
+  background: radial-gradient(circle, rgba(223,179,78,0.2) 0%, transparent 80%);
 }
 
 .gate-door-left .gate-handle-ring {
-  right: 15px;
+  right: 25px;
 }
 
 .gate-door-right .gate-handle-ring {
-  left: 15px;
+  left: 25px;
 }
 
 /* Gate Opening Transitions */

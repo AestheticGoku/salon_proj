@@ -577,12 +577,14 @@ export default function App() {
               <div className="gate-studs-grid">
                 {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
               </div>
+              <div className="gate-medallion"></div>
               <div className="gate-handle-ring"></div>
             </div>
             <div className="gate-door gate-door-right">
               <div className="gate-studs-grid">
                 {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
               </div>
+              <div className="gate-medallion"></div>
               <div className="gate-handle-ring"></div>
             </div>
             <div className="gate-welcome-panel">
@@ -845,12 +847,14 @@ export default function App() {
             <div className="gate-studs-grid">
               {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
             </div>
+            <div className="gate-medallion"></div>
             <div className="gate-handle-ring"></div>
           </div>
           <div className="gate-door gate-door-right">
             <div className="gate-studs-grid">
               {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
             </div>
+            <div className="gate-medallion"></div>
             <div className="gate-handle-ring"></div>
           </div>
           <div className="gate-welcome-panel">
