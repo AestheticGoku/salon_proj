@@ -588,13 +588,8 @@ export default function App() {
               <div className="gate-handle-ring"></div>
             </div>
             <div className="gate-welcome-panel">
-              <div className="gate-emblem-container">
-                <img src="/images/kesari_atelier_logo.png" alt="Kesari Atelier Logo" />
-              </div>
-              <h2>KESARI ATELIER</h2>
-              <p>Udaipur Heritage Spa & Salon</p>
-              <div style={{ color: 'var(--gold)', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '1rem', animation: 'pulseGold 2s infinite alternate' }}>
-                Opening the Palace Gates...
+              <div className="gate-emblem-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span className="gate-initials">KA</span>
               </div>
             </div>
           </div>
@@ -858,13 +853,8 @@ export default function App() {
             <div className="gate-handle-ring"></div>
           </div>
           <div className="gate-welcome-panel">
-            <div className="gate-emblem-container">
-              <img src="/images/kesari_atelier_logo.png" alt="Kesari Atelier Logo" />
-            </div>
-            <h2>KESARI ATELIER</h2>
-            <p>Udaipur Heritage Spa & Salon</p>
-            <div style={{ color: 'var(--gold)', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '1rem', animation: 'pulseGold 2s infinite alternate' }}>
-              Opening the Palace Gates...
+            <div className="gate-emblem-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span className="gate-initials">KA</span>
             </div>
           </div>
         </div>
