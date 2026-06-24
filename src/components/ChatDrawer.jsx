@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { AppContext } from '../context/AppContext'
 
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:8000/api'
+  : 'https://salonproj-production.up.railway.app/api';
+
 export default function ChatDrawer({ isOpen, onClose }) {
   const { user } = useContext(AppContext)
   const [activeTab, setActiveTab] = useState('ai') // 'ai' or 'staff'
@@ -64,7 +68,7 @@ export default function ChatDrawer({ isOpen, onClose }) {
   const fetchStaffMessages = async () => {
     if (!user) return
     try {
-      const response = await fetch(`https://salonproj-production.up.railway.app/api/chat/staff?userId=${user.id}`)
+      const response = await fetch(`${API_BASE_URL}/chat/staff?userId=${user.id}`)
       if (response.ok) {
         const data = await response.json()
         setStaffMessages(data)
@@ -90,7 +94,7 @@ export default function ChatDrawer({ isOpen, onClose }) {
       setIsAiLoading(true)
 
       try {
-        const response = await fetch('https://salonproj-production.up.railway.app/api/chat/ai', {
+        const response = await fetch(`${API_BASE_URL}/chat/ai`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: textToSend })
@@ -121,7 +125,7 @@ export default function ChatDrawer({ isOpen, onClose }) {
       }, 1000)
 
       try {
-        const response = await fetch('https://salonproj-production.up.railway.app/api/chat/staff', {
+        const response = await fetch(`${API_BASE_URL}/chat/staff`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

@@ -307,6 +307,144 @@ def chat_ai(request: schemas.AIChatRequest):
         
     return {"reply": reply}
 
+OCCASION_PLANNER_INSTRUCTION = """
+You are the Royal Occasion Planner for "Kesari Atelier", a luxury heritage spa, salon, and bridal studio in Udaipur, Rajasthan (City of Lakes), established in 2009.
+Your task is to take a guest's description of their upcoming occasion or event (e.g. "I have my wedding in 20 days", "Party in 5 days") and generate a chronological beauty and wellness preparation schedule leading up to their event.
+
+CRITICAL CONSTRAINTS:
+1. You MUST ONLY schedule and recommend services and products that are officially offered by Kesari Atelier:
+   Services:
+   - Royal Spa Retreats (₹8,500) [serviceId: spa]
+   - Heritage Salon (₹3,200) [serviceId: salon]
+   - Elite Bridal Grooming (₹45,000) [serviceId: bridal]
+   - Wellness Alchemy (₹5,500) [serviceId: wellness]
+   - Luminosity Facials (₹6,800) [serviceId: facial]
+   - Haute Nail Atelier (₹2,400) [serviceId: nail]
+   - Maharani Day Journey (₹24,000) [serviceId: maharani]
+
+   Boutique Products:
+   - Saffron & Rose Luminance Serum (₹3,200) [productId: bp1, brand: "Kesar Naturals", price: 3200, img: "/images/saffron_serum.png"]
+   - Jasmine & Vetiver Ritual Oil (₹1,800) [productId: bp2, brand: "Udaipur Attar", price: 1800, img: "/images/ritual_oil.png"]
+   - 24K Gold Facial Dust (₹5,500) [productId: bp3, brand: "Royal Glow", price: 5500, img: "/images/gold_dust.png"]
+   - Sandalwood Ubtan Body Scrub (₹1,200) [productId: bp4, brand: "Aravalli Herbs", price: 1200, img: "/images/body_scrub.png"]
+
+2. You MUST NOT mention any other products, services, or ingredients.
+3. You MUST respond in a polite, warm, and royal tone, starting with the Mewari greeting "Khammaghani".
+4. You MUST output your response STRICTLY as a valid JSON object. Do NOT wrap it in ```json ... ``` code blocks.
+5. The JSON structure MUST be exactly:
+{
+  "welcomeMessage": "polite Mewari greeting and welcome introduction detailing how we will prepare them for their occasion",
+  "timeline": [
+    {
+      "dayNumber": int (number of days before the event),
+      "timeLabel": "string representation, e.g. '15 Days Before' or '3 Days Before'",
+      "serviceId": "one of: spa, salon, bridal, wellness, facial, nail, maharani",
+      "serviceName": "correct name of the service",
+      "rationale": "royal explanation of how this service helps them prepare"
+    }
+  ],
+  "products": [
+    {
+      "id": "one of: bp1, bp2, bp3, bp4",
+      "name": "correct product name",
+      "brand": "correct product brand",
+      "price": int (price of product),
+      "img": "correct image path",
+      "usage": "royal tip on how to use this product leading up to the event"
+    }
+  ]
+}
+"""
+
+@app.post("/api/ai-occasion-planner")
+def ai_occasion_planner(request: schemas.OccasionPlannerRequest):
+    prompt = request.prompt
+    
+    # Standard fallback mock response in case of API failure or parser error
+    fallback_response = {
+        "welcomeMessage": "Khammaghani! We are delighted to assist you in preparing for your royal occasion. Here is a curated wellness schedule from Kesari Atelier.",
+        "timeline": [
+            {
+                "dayNumber": 10,
+                "timeLabel": "10 Days Before",
+                "serviceId": "spa",
+                "serviceName": "Royal Spa Retreats",
+                "rationale": "Dissolve pre-event tension with our signature Ayurvedic abhyanga massage and warm kesar-milk body wraps."
+            },
+            {
+                "dayNumber": 5,
+                "timeLabel": "5 Days Before",
+                "serviceId": "facial",
+                "serviceName": "Luminosity Facials",
+                "rationale": "Infuse your skin with 24K gold leaves and brightening saffron to ensure a luminous glow for the event."
+            },
+            {
+                "dayNumber": 2,
+                "timeLabel": "2 Days Before",
+                "serviceId": "salon",
+                "serviceName": "Heritage Salon",
+                "rationale": "Adorn your hands with traditional Rajputana jali-style mehndi and prepare your hair with botanical oil infusions."
+            }
+        ],
+        "products": [
+            {
+                "id": "bp1",
+                "name": "Saffron & Rose Luminance Serum",
+                "brand": "Kesar Naturals",
+                "price": 3200,
+                "img": "/images/saffron_serum.png",
+                "usage": "Apply 3-4 drops nightly on cleansed skin to lock in radiant hydration."
+            },
+            {
+                "id": "bp3",
+                "name": "24K Gold Facial Dust",
+                "brand": "Royal Glow",
+                "price": 5500,
+                "img": "/images/gold_dust.png",
+                "usage": "Mix a pinch with rose water and apply as a mask twice a week for royal luminosity."
+            }
+        ]
+    }
+    
+    if GENAI_AVAILABLE and GEMINI_API_KEY:
+        try:
+            model = genai.GenerativeModel(
+                model_name="gemini-2.5-flash",
+                system_instruction=OCCASION_PLANNER_INSTRUCTION
+            )
+            chat = model.start_chat(history=[])
+            response = chat.send_message(prompt)
+            
+            resp_text = response.text.strip()
+            
+            # Robust extraction of JSON from response text
+            import re
+            json_str = resp_text
+            # Try to extract content inside ```json ... ``` or ``` ... ```
+            code_block_match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", resp_text)
+            if code_block_match:
+                json_str = code_block_match.group(1).strip()
+            else:
+                # If no code block is found, extract between first { and last }
+                first_brace = resp_text.find("{")
+                last_brace = resp_text.rfind("}")
+                if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
+                    json_str = resp_text[first_brace:last_brace+1].strip()
+                    
+            try:
+                parsed_json = json.loads(json_str)
+                # Ensure structure is valid
+                if "welcomeMessage" in parsed_json and "timeline" in parsed_json:
+                    return parsed_json
+            except Exception as parse_err:
+                print(f"Error parsing Gemini response: {parse_err}. Text attempted: {json_str}")
+                
+        except Exception as e:
+            print(f"Gemini occasion planner error: {e}")
+            
+    return fallback_response
+
+
 def simulate_staff_reply(user_id: int, user_message: str):
     # Wait for 3 seconds to simulate typing delay
     time.sleep(3)

@@ -146,3 +146,8 @@ class AdminStatsResponse(BaseModel):
 
     class Config:
         populate_by_name = True
+
+# AI OCCASION PLANNER
+class OccasionPlannerRequest(BaseModel):
+    prompt: str
+

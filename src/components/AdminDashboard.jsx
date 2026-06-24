@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:8000/api'
+  : 'https://salonproj-production.up.railway.app/api';
+
 export default function AdminDashboard() {
   const { user, fetchAdminStats, fetchAdminUsers, fetchAdminBookings, fetchAdminOrders, updateBookingStatus } = useContext(AppContext)
   
@@ -42,7 +46,7 @@ export default function AdminDashboard() {
 
   const loadChats = async () => {
     try {
-      const res = await fetch('https://salonproj-production.up.railway.app/api/admin/chats')
+      const res = await fetch(`${API_BASE_URL}/admin/chats`)
       if (res.ok) {
         const data = await res.json()
         setChatRooms(data)
@@ -63,7 +67,7 @@ export default function AdminDashboard() {
     if (!replyText.trim() || !selectedChat) return
     setSendingReply(true)
     try {
-      const res = await fetch('https://salonproj-production.up.railway.app/api/chat/staff', {
+      const res = await fetch(`${API_BASE_URL}/chat/staff`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

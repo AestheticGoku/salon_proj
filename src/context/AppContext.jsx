@@ -2,7 +2,9 @@ import React, { createContext, useState, useEffect } from 'react'
 
 export const AppContext = createContext()
 
-const API_BASE_URL = 'https://salonproj-production.up.railway.app/api'
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:8000/api'
+  : 'https://salonproj-production.up.railway.app/api'
 
 export const AppProvider = ({ children }) => {
   // Load logged in user on session start
