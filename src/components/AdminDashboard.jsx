@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:8000/api'
+const API_BASE_URL = window.location.hostname !== 'salonproj-production.up.railway.app'
+  ? `http://${window.location.hostname || 'localhost'}:8000/api`
   : 'https://salonproj-production.up.railway.app/api';
 
 export default function AdminDashboard() {

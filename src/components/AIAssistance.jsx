@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:8000/api'
+const API_BASE_URL = window.location.hostname !== 'salonproj-production.up.railway.app'
+  ? `http://${window.location.hostname || 'localhost'}:8000/api`
   : 'https://salonproj-production.up.railway.app/api';
 
 export default function AIAssistance() {
@@ -87,6 +87,51 @@ export default function AIAssistance() {
     }
   }
 
+  const getFallbackPlan = () => ({
+    welcomeMessage: "Khammaghani! We are delighted to assist you in preparing for your royal occasion. Here is a curated wellness schedule from Kesari Atelier.",
+    timeline: [
+      {
+        dayNumber: 10,
+        timeLabel: "10 Days Before",
+        serviceId: "spa",
+        serviceName: "Royal Spa Retreats",
+        rationale: "Dissolve pre-event tension with our signature Ayurvedic abhyanga massage and warm kesar-milk body wraps."
+      },
+      {
+        dayNumber: 5,
+        timeLabel: "5 Days Before",
+        serviceId: "facial",
+        serviceName: "Luminosity Facials",
+        rationale: "Infuse your skin with 24K gold leaves and brightening saffron to ensure a luminous glow for the event."
+      },
+      {
+        dayNumber: 2,
+        timeLabel: "2 Days Before",
+        serviceId: "salon",
+        serviceName: "Heritage Salon",
+        rationale: "Adorn your hands with traditional Rajputana jali-style mehndi and prepare your hair with botanical oil infusions."
+      }
+    ],
+    products: [
+      {
+        id: "bp1",
+        name: "Saffron & Rose Luminance Serum",
+        brand: "Kesar Naturals",
+        price: 3200,
+        img: "/images/saffron_serum.png",
+        usage: "Apply 3-4 drops nightly on cleansed skin to lock in radiant hydration."
+      },
+      {
+        id: "bp3",
+        name: "24K Gold Facial Dust",
+        brand: "Royal Glow",
+        price: 5500,
+        img: "/images/gold_dust.png",
+        usage: "Mix a pinch with rose water and apply as a mask twice a week for royal luminosity."
+      }
+    ]
+  })
+
   // API Call for AI Planner (Occasion Planning)
   const fetchOccasionPlan = async () => {
     if (!plannerPrompt.trim()) return
@@ -105,9 +150,11 @@ export default function AIAssistance() {
         setPlannerResult(data)
       } else {
         console.error('Failed to generate occasion plan')
+        setPlannerResult(getFallbackPlan())
       }
     } catch (e) {
       console.error('Error connecting to planner API:', e)
+      setPlannerResult(getFallbackPlan())
     } finally {
       setIsPlannerLoading(false)
     }
