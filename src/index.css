@@ -1410,6 +1410,59 @@ nav.desktop-nav {
   margin: 1.5rem 0;
 }
 
+.ai-planner-timeline {
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-bottom: 2rem;
+}
+
+.ai-planner-timeline::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ai-planner-timeline::-webkit-scrollbar-track {
+  background: rgba(250, 248, 243, 0.03);
+}
+
+.ai-planner-timeline::-webkit-scrollbar-thumb {
+  background: rgba(201, 168, 76, 0.3);
+  border-radius: 2px;
+}
+
+.ai-planner-timeline::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+.timeline-node.clickable-node {
+  transition: transform 0.2s ease;
+}
+
+.timeline-node.clickable-node:hover {
+  transform: translateX(4px);
+}
+
+.instabook-badge {
+  font-size: 0.58rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 0.5px solid rgba(201, 168, 76, 0.4);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(201, 168, 76, 0.05);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.timeline-node:hover .instabook-badge {
+  background: var(--gold);
+  color: var(--white);
+  border-color: var(--gold);
+  box-shadow: 0 2px 8px rgba(201, 168, 76, 0.3);
+}
+
 .vertical-timeline::before {
   content: '';
   position: absolute;

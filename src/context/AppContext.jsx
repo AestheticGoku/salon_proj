@@ -26,6 +26,10 @@ export const AppProvider = ({ children }) => {
   
   // Bookings are loaded dynamically from SQLite database
   const [bookings, setBookings] = useState([])
+  const [bookingFormData, setBookingFormData] = useState({
+    firstName: '', lastName: '', service: 'Royal Spa Retreats',
+    date: '', time: 'Morning — 9:00 am', phone: '', specialRequests: ''
+  })
   const [activeTab, setActiveTab] = useState('home')
   const [isCartOpen, setCartOpen] = useState(false)
   const [isAuthOpen, setAuthOpen] = useState(false)
@@ -232,6 +236,27 @@ export const AppProvider = ({ children }) => {
     return null
   }
 
+  const triggerBookingPrefill = (serviceName, dateStr = '', specialRequestsStr = '') => {
+    setBookingFormData(prev => ({
+      ...prev,
+      service: serviceName,
+      date: dateStr || prev.date,
+      specialRequests: specialRequestsStr || prev.specialRequests
+    }))
+    
+    // Switch tabs based on screen size
+    if (window.innerWidth <= 768) {
+      setActiveTab('book')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      setActiveTab('home')
+      setTimeout(() => {
+        const el = document.getElementById('booking')
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    }
+  }
+
   // Admin API methods
   const fetchAdminStats = async () => {
     try {
@@ -307,7 +332,10 @@ export const AppProvider = ({ children }) => {
         fetchAdminStats,
         fetchAdminUsers,
         fetchAdminBookings,
-        fetchAdminOrders
+        fetchAdminOrders,
+        bookingFormData,
+        setBookingFormData,
+        triggerBookingPrefill
       }}
     >
       {children}

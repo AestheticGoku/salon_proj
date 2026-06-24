@@ -6,7 +6,7 @@ const API_BASE_URL = window.location.hostname !== 'salonproj-production.up.railw
   : 'https://salonproj-production.up.railway.app/api';
 
 export default function AIAssistance() {
-  const { addToCart, addBooking } = useContext(AppContext)
+  const { addToCart, addBooking, triggerBookingPrefill } = useContext(AppContext)
   const [isOpen, setOpen] = useState(false)
   const [mode, setMode] = useState(null) // null: Welcome/Menu, 'advisor': AI Advisor Quiz, 'planner': AI Planner
   const [step, setStep] = useState(0) // 0: Name, 1: Goal, 2: Skin, 3: Duration, 4: Result (for AI Advisor)
@@ -200,6 +200,27 @@ export default function AIAssistance() {
       })
     })
     setIsBooked(true)
+  }
+
+  const handleTimelineItemClick = (item) => {
+    const match = plannerPrompt.match(/\d+/)
+    const totalDays = match ? parseInt(match[0], 10) : 15
+    
+    let bookingDate = new Date()
+    if (item.dayNumber !== undefined) {
+      const daysFromToday = Math.max(0, totalDays - item.dayNumber)
+      bookingDate.setDate(bookingDate.getDate() + daysFromToday)
+    } else {
+      bookingDate.setDate(bookingDate.getDate() + 1)
+    }
+    
+    const dateStr = bookingDate.toISOString().split('T')[0]
+    setOpen(false)
+    triggerBookingPrefill(
+      item.serviceName,
+      dateStr,
+      `Scheduled via AI Occasion Planner: ${plannerPrompt}`
+    )
   }
 
   return (
@@ -592,11 +613,19 @@ export default function AIAssistance() {
                         <h4 className="ai-section-title">Sequential Preparation Steps</h4>
                         <div className="vertical-timeline">
                           {plannerResult.timeline.map((item, idx) => (
-                            <div className="timeline-node" key={idx}>
+                            <div 
+                              className="timeline-node clickable-node" 
+                              key={idx}
+                              onClick={() => handleTimelineItemClick(item)}
+                              style={{ cursor: 'pointer' }}
+                            >
                               <div className="timeline-dot"></div>
                               <div className="timeline-content-box">
                                 <div className="timeline-time-badge">{item.timeLabel}</div>
-                                <h5 className="timeline-service-title">{item.serviceName}</h5>
+                                <h5 className="timeline-service-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+                                  {item.serviceName}
+                                  <span className="instabook-badge">Book Instantly →</span>
+                                </h5>
                                 <p className="timeline-service-rationale">{item.rationale}</p>
                               </div>
                             </div>

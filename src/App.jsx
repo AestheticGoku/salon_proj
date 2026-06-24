@@ -391,7 +391,7 @@ function MobileAccountScreen({ user, logout, bookings, deleteBooking, setActiveT
 
 // ─── Main App ────────────────────────────────────────────────────────────────
 export default function App() {
-  const { cart, addToCart, bookings, addBooking, deleteBooking, activeTab, setActiveTab, user, setAuthOpen, setCartOpen } = useContext(AppContext)
+  const { cart, addToCart, bookings, addBooking, deleteBooking, activeTab, setActiveTab, user, setAuthOpen, setCartOpen, bookingFormData, setBookingFormData, triggerBookingPrefill } = useContext(AppContext)
   const [isChatOpen, setChatOpen] = useState(false)
   const [mobile, setMobile] = useState(isMobileDevice())
 
@@ -418,11 +418,6 @@ export default function App() {
   ]
 
   const [activeModalService, setActiveModalService] = useState(null)
-
-  const [bookingFormData, setBookingFormData] = useState({
-    firstName: '', lastName: '', service: 'Royal Spa Retreats',
-    date: '', time: 'Morning — 9:00 am', phone: '', specialRequests: ''
-  })
   const [bookingStatus, setBookingStatus] = useState(null)
 
   const submitBooking = (e) => {
