@@ -14,27 +14,27 @@ const isMobileDevice = () => window.innerWidth <= 768
 function MobileHomeScreen({ onNavigate, bookings, setActiveTab }) {
   return (
     <div className="mobile-screen" style={{ animation: 'fadeIn 0.3s' }}>
-      {/* Hero strip */}
+      {/* Hero strip — dark arch-inspired background */}
       <div className="mobile-hero">
-        <span className="hero-ornament" style={{ fontSize: '0.55rem' }}>City of Lakes · Udaipur, Rajasthan</span>
+        <span className="hero-ornament">City of Lakes · Udaipur, Rajasthan</span>
         <h1 style={{ fontSize: 'clamp(2.4rem, 10vw, 3.2rem)', lineHeight: 1.08 }}>Where <em>Heritage</em><br />Meets Ritual</h1>
-        <p style={{ fontSize: '0.78rem', color: 'var(--charcoal-soft)', letterSpacing: '0.08em', marginTop: '0.8rem', lineHeight: 1.7 }}>
-          Luxury spa sanctuaries, heritage artistry & elite bridal ceremonies.
+        <p style={{ fontSize: '0.8rem', letterSpacing: '0.06em', marginTop: '0.8rem', lineHeight: 1.75 }}>
+          Luxury spa sanctuaries, heritage artistry &amp; elite bridal ceremonies.
         </p>
-        <div style={{ display: 'flex', gap: '0.8rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
-          <button className="btn-primary" style={{ flex: 1, padding: '0.9rem 1rem', fontSize: '0.68rem' }} onClick={() => onNavigate('book')}>Book an Experience</button>
-          <button className="btn-ghost" style={{ flex: 1, padding: '0.9rem 1rem', fontSize: '0.68rem' }} onClick={() => onNavigate('rituals')}>Explore Offerings</button>
+        <div style={{ display: 'flex', gap: '0.8rem', marginTop: '1.8rem', flexWrap: 'wrap' }}>
+          <button className="btn-primary" style={{ flex: 1, padding: '0.95rem 1rem', fontSize: '0.68rem' }} onClick={() => onNavigate('book')}>Book an Experience</button>
+          <button className="btn-ghost" style={{ flex: 1, padding: '0.95rem 1rem', fontSize: '0.68rem' }} onClick={() => onNavigate('rituals')}>Explore Offerings</button>
         </div>
         {bookings.length > 0 && (
-          <button className="btn-outline" style={{ marginTop: '1rem', width: '100%', padding: '0.7rem', fontSize: '0.65rem' }} onClick={() => setActiveTab('bookings')}>
+          <button className="btn-outline" style={{ marginTop: '1rem', width: '100%', padding: '0.8rem', fontSize: '0.65rem', borderColor: 'rgba(201,168,76,0.5)', color: 'var(--gold-light)', background: 'transparent' }} onClick={() => setActiveTab('bookings')}>
             View My {bookings.length} Reservation{bookings.length > 1 ? 's' : ''} →
           </button>
         )}
       </div>
 
       {/* Quick access cards */}
-      <div style={{ padding: '0 1.2rem 1.5rem' }}>
-        <p style={{ fontSize: '0.6rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '1rem' }}>Quick Access</p>
+      <div style={{ padding: '1.8rem 1.2rem 1.5rem', background: 'var(--ivory)' }}>
+        <p style={{ fontSize: '0.58rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '1.2rem' }}>Quick Access</p>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
           {[
             { icon: '✦', label: 'Royal Spa', sub: 'From ₹8,500', tab: 'rituals' },
@@ -44,8 +44,8 @@ function MobileHomeScreen({ onNavigate, bookings, setActiveTab }) {
           ].map(card => (
             <button key={card.tab + card.label} onClick={() => onNavigate(card.tab)} style={{
               background: 'var(--white)', border: '0.5px solid var(--border-gold)',
-              padding: '1.2rem 1rem', textAlign: 'left', cursor: 'pointer',
-              transition: 'all 0.2s', borderRadius: '0'
+              padding: '1.4rem 1rem', textAlign: 'left', cursor: 'pointer',
+              transition: 'all 0.2s', borderRadius: '2px', minHeight: '90px'
             }}>
               <div style={{ fontSize: '1.2rem', color: 'var(--gold)', marginBottom: '0.5rem' }}>{card.icon}</div>
               <div style={{ fontFamily: 'Cormorant Garamond', fontSize: '1rem', color: 'var(--charcoal)' }}>{card.label}</div>
@@ -115,23 +115,24 @@ function MobileHomeScreen({ onNavigate, bookings, setActiveTab }) {
 function MobileRitualsScreen({ services, onSelectService }) {
   return (
     <div className="mobile-screen" style={{ animation: 'fadeIn 0.3s' }}>
-      <div style={{ padding: '1.5rem 1.2rem 1rem' }}>
-        <span className="section-eyebrow" style={{ fontSize: '0.58rem' }}>Our Sanctuaries</span>
-        <h2 style={{ fontSize: '1.8rem', marginTop: '0.4rem' }}>Crafted for <em>Royalty</em></h2>
+      <div style={{ padding: '1.8rem 1.4rem 1.2rem', background: 'var(--cream)', borderBottom: '0.5px solid var(--border-gold)' }}>
+        <span className="section-eyebrow">Our Sanctuaries</span>
+        <h2 style={{ fontSize: '2rem', marginTop: '0.4rem' }}>Crafted for <em>Royalty</em></h2>
+        <p style={{ fontSize: '0.78rem', color: 'var(--charcoal-soft)', lineHeight: 1.7, marginTop: '0.4rem' }}>Tap any ritual to explore inclusions &amp; pricing.</p>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         {Object.entries(services).map(([key, svc]) => (
           <button key={key} onClick={() => onSelectService(key)} style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '1.4rem 1.2rem', background: 'var(--white)',
+            padding: '1.5rem 1.4rem', background: 'var(--white)',
             borderBottom: '0.5px solid var(--border-soft)', border: 'none',
             cursor: 'pointer', textAlign: 'left', width: '100%',
-            transition: 'background 0.2s'
+            transition: 'background 0.2s', minHeight: '80px'
           }}>
             <div style={{ flex: 1 }}>
-              <div style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.2rem', color: 'var(--charcoal)', marginBottom: '0.2rem' }}>{svc.title}</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--charcoal-soft)', lineHeight: 1.5 }}>{svc.desc.slice(0, 70)}…</div>
-              <div style={{ fontSize: '0.78rem', color: 'var(--gold)', marginTop: '0.4rem', fontWeight: 500 }}>{svc.price}</div>
+              <div style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.25rem', color: 'var(--charcoal)', marginBottom: '0.25rem' }}>{svc.title}</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--charcoal-soft)', lineHeight: 1.5 }}>{svc.desc.slice(0, 72)}…</div>
+              <div style={{ fontSize: '0.82rem', color: 'var(--gold)', marginTop: '0.4rem', fontWeight: 500 }}>{svc.price}</div>
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginLeft: '1rem' }}>
               <polyline points="9 18 15 12 9 6"></polyline>
@@ -195,15 +196,15 @@ function MobileBridalScreen({ onBook }) {
 function MobileBookScreen({ bookingFormData, setBookingFormData, submitBooking, bookingStatus, user, setAuthOpen }) {
   return (
     <div className="mobile-screen" style={{ animation: 'fadeIn 0.3s' }}>
-      <div style={{ padding: '1.5rem 1.2rem 1rem' }}>
-        <span className="section-eyebrow" style={{ fontSize: '0.58rem' }}>Reserve Your Visit</span>
-        <h2 style={{ fontSize: '1.8rem', marginTop: '0.4rem' }}>Book an <em>Experience</em></h2>
-        <p style={{ fontSize: '0.78rem', color: 'var(--charcoal-soft)', lineHeight: 1.7, marginTop: '0.5rem' }}>
+      <div style={{ padding: '1.8rem 1.4rem 1.2rem', background: 'var(--cream)', borderBottom: '0.5px solid var(--border-gold)' }}>
+        <span className="section-eyebrow">Reserve Your Visit</span>
+        <h2 style={{ fontSize: '2rem', marginTop: '0.4rem' }}>Book an <em>Experience</em></h2>
+        <p style={{ fontSize: '0.8rem', color: 'var(--charcoal-soft)', lineHeight: 1.7, marginTop: '0.5rem' }}>
           Our concierge confirms within 2 hours and curates a personalised pre-visit ritual guide.
         </p>
       </div>
 
-      <form onSubmit={submitBooking} style={{ padding: '0 1.2rem 2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <form onSubmit={submitBooking} style={{ padding: '1.6rem 1.4rem 2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
           <div className="form-group">
             <label htmlFor="m-firstName">First Name</label>
@@ -274,25 +275,26 @@ function MobileBookScreen({ bookingFormData, setBookingFormData, submitBooking, 
 function MobileBoutiqueScreen({ products, addToCart, setCartOpen }) {
   return (
     <div className="mobile-screen" style={{ animation: 'fadeIn 0.3s' }}>
-      <div style={{ padding: '1.5rem 1.2rem 1rem' }}>
-        <span className="section-eyebrow" style={{ fontSize: '0.58rem' }}>Royal Boutique</span>
-        <h2 style={{ fontSize: '1.8rem', marginTop: '0.4rem' }}>Bring the <em>Ritual</em> Home</h2>
+      <div style={{ padding: '1.8rem 1.4rem 1.2rem', background: 'var(--cream)', borderBottom: '0.5px solid var(--border-gold)' }}>
+        <span className="section-eyebrow">Royal Boutique</span>
+        <h2 style={{ fontSize: '2rem', marginTop: '0.4rem' }}>Bring the <em>Ritual</em> Home</h2>
+        <p style={{ fontSize: '0.78rem', color: 'var(--charcoal-soft)', lineHeight: 1.7, marginTop: '0.4rem' }}>Heritage elixirs, artisanal oils &amp; luxury formulations.</p>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
         {products.map(p => (
-          <div key={p.id} style={{ display: 'flex', gap: '1rem', padding: '1.2rem', borderBottom: '0.5px solid var(--border-soft)', background: 'var(--white)', alignItems: 'center' }}>
-            <div style={{ width: '80px', height: '80px', background: 'var(--cream)', border: '0.5px solid var(--border-soft)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          <div key={p.id} style={{ display: 'flex', gap: '1rem', padding: '1.4rem', borderBottom: '0.5px solid var(--border-soft)', background: 'var(--white)', alignItems: 'center' }}>
+            <div style={{ width: '88px', height: '88px', background: 'var(--cream)', border: '0.5px solid var(--border-gold)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', borderRadius: '2px' }}>
               {p.img && p.img.startsWith('/images/') ? (
                 <img src={p.img} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : p.img}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: '0.58rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--charcoal-soft)' }}>{p.brand}</div>
-              <div style={{ fontFamily: 'Cormorant Garamond', fontSize: '1rem', color: 'var(--charcoal)', lineHeight: 1.3, margin: '0.2rem 0' }}>{p.name}</div>
+              <div style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.05rem', color: 'var(--charcoal)', lineHeight: 1.3, margin: '0.25rem 0' }}>{p.name}</div>
               {p.badge && <span style={{ fontSize: '0.55rem', padding: '0.15rem 0.5rem', background: 'var(--charcoal)', color: 'var(--gold-light)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{p.badge}</span>}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.6rem' }}>
-                <span style={{ fontSize: '0.9rem', color: 'var(--gold)', fontWeight: 500 }}>₹ {p.price.toLocaleString('en-IN')}</span>
-                <button className="product-add" style={{ fontSize: '0.62rem', padding: '0.4rem 0.9rem' }} onClick={() => { addToCart(p); setCartOpen(true) }}>Add →</button>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.7rem' }}>
+                <span style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.1rem', color: 'var(--gold)', fontWeight: 500 }}>₹ {p.price.toLocaleString('en-IN')}</span>
+                <button className="product-add" style={{ fontSize: '0.65rem', padding: '0.5rem 1rem', minHeight: '36px' }} onClick={() => { addToCart(p); setCartOpen(true) }}>Add →</button>
               </div>
             </div>
           </div>
@@ -345,8 +347,8 @@ function MobileAccountScreen({ user, logout, bookings, deleteBooking, setActiveT
       </div>
 
       {/* Reservations */}
-      <div style={{ padding: '0 1.2rem 2rem' }}>
-        <p style={{ fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '1rem' }}>My Reservations</p>
+      <div style={{ padding: '0 1.4rem 2rem' }}>
+        <p style={{ fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '1.2rem', marginTop: '1.5rem' }}>My Reservations</p>
         {bookings.length === 0 ? (
           <div style={{ padding: '2rem', textAlign: 'center', background: 'var(--white)', border: '0.5px solid var(--border-soft)' }}>
             <p style={{ fontSize: '0.8rem', color: 'var(--charcoal-soft)', fontStyle: 'italic' }}>No active bookings.</p>
