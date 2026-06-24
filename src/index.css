@@ -2574,6 +2574,23 @@ footer {
   color: var(--success);
 }
 
+.admin-badge.pending {
+  background: rgba(223, 179, 78, 0.1);
+  color: var(--gold);
+}
+
+.admin-badge.rejected {
+  background: rgba(224, 122, 95, 0.1);
+  color: #e07a5f;
+}
+
+.admin-badge.cancelled {
+  background: rgba(26, 26, 24, 0.08);
+  color: var(--charcoal-soft);
+  text-decoration: line-through;
+}
+
+
 /* STAFF CHAT DESK */
 .chat-desk-container {
   display: flex;

@@ -191,7 +191,7 @@ def login(credentials: schemas.UserLogin, db: Session = Depends(get_db)):
 def get_bookings(userId: Optional[int] = None, db: Session = Depends(get_db)):
     query = db.query(models.Booking)
     if userId is not None:
-        query = query.filter(models.Booking.user_id == userId)
+        query = query.filter(models.Booking.user_id == userId).filter(models.Booking.status != "Cancelled")
     bookings = query.order_by(models.Booking.created_at.desc()).all()
     return bookings
 
@@ -220,7 +220,7 @@ def delete_booking(booking_id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Reservation with ID {booking_id} not found."
         )
-    db.delete(db_booking)
+    db_booking.status = "Cancelled"
     db.commit()
     return None
 

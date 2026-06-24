@@ -119,6 +119,59 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleDownloadReport = () => {
+    let csvContent = "\ufeff"; // Add BOM for Excel UTF-8 compatibility
+    let fileName = "";
+
+    if (activeTab === 'bookings') {
+      fileName = "Kesari_Atelier_Bookings_Report.csv";
+      csvContent += "Ref ID,Guest Name,Ritual / Service,Date,Time,Phone,Status,Special Notes,Rejection Reason\n";
+      adminBookings.forEach(b => {
+        const guestName = `"${b.firstName} ${b.lastName || ''}"`;
+        const service = `"${b.service}"`;
+        const specialNotes = `"${(b.specialRequests || '').replace(/"/g, '""').replace(/\r?\n/g, ' ')}"`;
+        const rejectionMsg = `"${(b.rejection_message || '').replace(/"/g, '""').replace(/\r?\n/g, ' ')}"`;
+        csvContent += `${b.id},${guestName},${service},${b.date},${b.time},${b.phone},${b.status || 'Pending'},${specialNotes},${rejectionMsg}\n`;
+      });
+    } else if (activeTab === 'users') {
+      fileName = "Kesari_Atelier_Guests_Report.csv";
+      csvContent += "Guest ID,Name,Email Address,Role,Joined Date\n";
+      adminUsers.forEach(u => {
+        const name = `"${u.name}"`;
+        const email = `"${u.email}"`;
+        const role = u.isAdmin ? "Admin" : u.isStaff ? "Staff" : "Guest";
+        const joinedDate = new Date(u.created_at).toLocaleDateString('en-IN');
+        csvContent += `${u.id},${name},${email},${role},${joinedDate}\n`;
+      });
+    } else if (activeTab === 'orders') {
+      fileName = "Kesari_Atelier_Boutique_Orders_Report.csv";
+      csvContent += "Order ID,Total Price (INR),Items Ordered,Order Date\n";
+      adminOrders.forEach(o => {
+        let parsedItems = [];
+        try {
+          parsedItems = JSON.parse(o.items);
+        } catch (e) {
+          console.error(e);
+        }
+        const itemsStr = `"${parsedItems.map(item => `${item.name} (qty: ${item.quantity})`).join('; ')}"`;
+        const orderDate = new Date(o.created_at).toLocaleDateString('en-IN') + ' ' + new Date(o.created_at).toLocaleTimeString('en-IN');
+        csvContent += `${o.id},${o.totalPrice},${itemsStr},${orderDate}\n`;
+      });
+    } else {
+      return;
+    }
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", fileName);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (!user || (!user.isAdmin && !user.isStaff)) {
     return (
       <div className="admin-dashboard" style={{ textAlign: 'center', padding: '10rem 2rem' }}>
@@ -182,6 +235,16 @@ export default function AdminDashboard() {
       {/* OVERVIEW STATS CARDS */}
       <div className="admin-stats-grid">
         <div className="admin-stat-card">
+          <span className="admin-stat-label">Overall Revenue</span>
+          <div className="admin-stat-value">
+            {user.isAdmin ? (
+              <><em>₹</em>{(stats.boutiqueRevenue + stats.estimatedBookingValue).toLocaleString('en-IN')}</>
+            ) : (
+              <span style={{ fontSize: '1.2rem', color: 'var(--charcoal-soft)', letterSpacing: '0.05em' }}>Clearance Required</span>
+            )}
+          </div>
+        </div>
+        <div className="admin-stat-card">
           <span className="admin-stat-label">Boutique Profits</span>
           <div className="admin-stat-value">
             {user.isAdmin ? (
@@ -211,6 +274,12 @@ export default function AdminDashboard() {
           <span className="admin-stat-label">Total Reservations</span>
           <div className="admin-stat-value">
             {stats.totalBookings}
+          </div>
+        </div>
+        <div className="admin-stat-card">
+          <span className="admin-stat-label">Cancelled Reservations</span>
+          <div className="admin-stat-value">
+            {adminBookings.filter(b => b.status === 'Cancelled').length}
           </div>
         </div>
       </div>
@@ -305,33 +374,49 @@ export default function AdminDashboard() {
 
       {/* LEDGER TABLES SECTION */}
       <div className="admin-ledger-section">
-        <div className="admin-ledger-header">
+        <div className="admin-ledger-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
           <h3>Administrative <em>Registers</em></h3>
-          <div className="admin-tab-nav">
-            <button 
-              className={`admin-tab-link ${activeTab === 'bookings' ? 'active' : ''}`}
-              onClick={() => setActiveTab('bookings')}
-            >
-              Bookings Ledger ({adminBookings.length})
-            </button>
-            <button 
-              className={`admin-tab-link ${activeTab === 'users' ? 'active' : ''}`}
-              onClick={() => setActiveTab('users')}
-            >
-              Guest Ledger ({adminUsers.length})
-            </button>
-            <button 
-              className={`admin-tab-link ${activeTab === 'orders' ? 'active' : ''}`}
-              onClick={() => setActiveTab('orders')}
-            >
-              Orders Ledger ({adminOrders.length})
-            </button>
-            <button 
-              className={`admin-tab-link ${activeTab === 'chat' ? 'active' : ''}`}
-              onClick={() => setActiveTab('chat')}
-            >
-              Staff Chat Desk ({chatRooms.length})
-            </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+            <div className="admin-tab-nav">
+              <button 
+                className={`admin-tab-link ${activeTab === 'bookings' ? 'active' : ''}`}
+                onClick={() => setActiveTab('bookings')}
+              >
+                Bookings Ledger ({adminBookings.length})
+              </button>
+              <button 
+                className={`admin-tab-link ${activeTab === 'users' ? 'active' : ''}`}
+                onClick={() => setActiveTab('users')}
+              >
+                Guest Ledger ({adminUsers.length})
+              </button>
+              <button 
+                className={`admin-tab-link ${activeTab === 'orders' ? 'active' : ''}`}
+                onClick={() => setActiveTab('orders')}
+              >
+                Orders Ledger ({adminOrders.length})
+              </button>
+              <button 
+                className={`admin-tab-link ${activeTab === 'chat' ? 'active' : ''}`}
+                onClick={() => setActiveTab('chat')}
+              >
+                Staff Chat Desk ({chatRooms.length})
+              </button>
+            </div>
+            {user.isAdmin && activeTab !== 'chat' && (
+              <button 
+                onClick={handleDownloadReport} 
+                className="btn-primary" 
+                style={{ padding: '0.5rem 1.1rem', fontSize: '0.68rem', display: 'flex', alignItems: 'center', gap: '0.4rem', border: '0.5px solid var(--border-gold)' }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download Report
+              </button>
+            )}
           </div>
         </div>
 
@@ -376,13 +461,13 @@ export default function AdminDashboard() {
                   <th>Mobile Number</th>
                   <th>Status</th>
                   <th>Special Notes</th>
-                  <th>Actions</th>
+                  {user.isStaff && !user.isAdmin && <th>Actions</th>}
                 </tr>
               </thead>
               <tbody>
                 {adminBookings.length === 0 ? (
                   <tr>
-                    <td colSpan="8" style={{ textAlign: 'center', padding: '4rem 0', fontStyle: 'italic', color: 'var(--charcoal-soft)' }}>
+                    <td colSpan={user.isStaff && !user.isAdmin ? 8 : 7} style={{ textAlign: 'center', padding: '4rem 0', fontStyle: 'italic', color: 'var(--charcoal-soft)' }}>
                       No active bookings booked.
                     </td>
                   </tr>
@@ -405,91 +490,93 @@ export default function AdminDashboard() {
                         )}
                       </td>
                       <td style={{ fontSize: '0.72rem', color: 'var(--charcoal-soft)' }}>{b.specialRequests || '—'}</td>
-                      <td>
-                        {rejectionTargetId === b.id ? (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', width: '160px' }}>
-                            <input
-                              type="text"
-                              placeholder="Type reason or re-reserve time..."
-                              value={rejectionNote}
-                              onChange={(e) => setRejectionNote(e.target.value)}
-                              style={{ 
-                                fontSize: '0.7rem', 
-                                padding: '0.3rem 0.5rem', 
-                                background: 'rgba(25, 25, 23, 0.4)',
-                                border: '1px solid var(--border-soft)',
-                                color: 'var(--white)',
-                                width: '100%'
-                              }}
-                              required
-                            />
+                      {user.isStaff && !user.isAdmin && (
+                        <td>
+                          {rejectionTargetId === b.id ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', width: '160px' }}>
+                              <input
+                                type="text"
+                                placeholder="Type reason or re-reserve time..."
+                                value={rejectionNote}
+                                onChange={(e) => setRejectionNote(e.target.value)}
+                                style={{ 
+                                  fontSize: '0.7rem', 
+                                  padding: '0.3rem 0.5rem', 
+                                  background: 'rgba(25, 25, 23, 0.4)',
+                                  border: '1px solid var(--border-soft)',
+                                  color: 'var(--white)',
+                                  width: '100%'
+                                }}
+                                required
+                              />
+                              <div style={{ display: 'flex', gap: '0.4rem' }}>
+                                <button
+                                  className="btn-primary"
+                                  style={{ padding: '0.2rem 0.6rem', fontSize: '0.62rem', background: '#e07a5f' }}
+                                  onClick={async () => {
+                                    if (!rejectionNote.trim()) return
+                                    const updated = await updateBookingStatus(b.id, 'Rejected', rejectionNote)
+                                    if (updated) {
+                                      setAdminBookings(prev => prev.map(item => item.id === b.id ? updated : item))
+                                    }
+                                    setRejectionTargetId(null)
+                                    setRejectionNote('')
+                                  }}
+                                >
+                                  Submit
+                                </button>
+                                <button
+                                  className="btn-ghost"
+                                  style={{ padding: '0.2rem 0.6rem', fontSize: '0.62rem' }}
+                                  onClick={() => {
+                                    setRejectionTargetId(null)
+                                    setRejectionNote('')
+                                  }}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
                             <div style={{ display: 'flex', gap: '0.4rem' }}>
                               <button
                                 className="btn-primary"
-                                style={{ padding: '0.2rem 0.6rem', fontSize: '0.62rem', background: '#e07a5f' }}
+                                style={{ 
+                                  padding: '0.3rem 0.8rem', 
+                                  fontSize: '0.65rem', 
+                                  background: b.status === 'Confirmed' ? '#4CAF50' : 'rgba(76, 175, 80, 0.1)', 
+                                  border: b.status === 'Confirmed' ? 'none' : '1px solid #4CAF50',
+                                  color: b.status === 'Confirmed' ? '#fff' : '#4CAF50'
+                                }}
                                 onClick={async () => {
-                                  if (!rejectionNote.trim()) return
-                                  const updated = await updateBookingStatus(b.id, 'Rejected', rejectionNote)
+                                  const updated = await updateBookingStatus(b.id, 'Confirmed')
                                   if (updated) {
                                     setAdminBookings(prev => prev.map(item => item.id === b.id ? updated : item))
                                   }
-                                  setRejectionTargetId(null)
-                                  setRejectionNote('')
                                 }}
                               >
-                                Submit
+                                Confirm
                               </button>
                               <button
                                 className="btn-ghost"
-                                style={{ padding: '0.2rem 0.6rem', fontSize: '0.62rem' }}
+                                style={{ 
+                                  padding: '0.3rem 0.8rem', 
+                                  fontSize: '0.65rem', 
+                                  borderColor: '#e07a5f', 
+                                  color: b.status === 'Rejected' ? '#fff' : '#e07a5f',
+                                  background: b.status === 'Rejected' ? '#e07a5f' : 'transparent'
+                                }}
                                 onClick={() => {
-                                  setRejectionTargetId(null)
-                                  setRejectionNote('')
+                                  setRejectionTargetId(b.id)
+                                  setRejectionNote(b.rejection_message || '')
                                 }}
                               >
-                                Cancel
+                                Reject
                               </button>
                             </div>
-                          </div>
-                        ) : (
-                          <div style={{ display: 'flex', gap: '0.4rem' }}>
-                            <button
-                              className="btn-primary"
-                              style={{ 
-                                padding: '0.3rem 0.8rem', 
-                                fontSize: '0.65rem', 
-                                background: b.status === 'Confirmed' ? '#4CAF50' : 'rgba(76, 175, 80, 0.1)', 
-                                border: b.status === 'Confirmed' ? 'none' : '1px solid #4CAF50',
-                                color: b.status === 'Confirmed' ? '#fff' : '#4CAF50'
-                              }}
-                              onClick={async () => {
-                                const updated = await updateBookingStatus(b.id, 'Confirmed')
-                                if (updated) {
-                                  setAdminBookings(prev => prev.map(item => item.id === b.id ? updated : item))
-                                }
-                              }}
-                            >
-                              Confirm
-                            </button>
-                            <button
-                              className="btn-ghost"
-                              style={{ 
-                                padding: '0.3rem 0.8rem', 
-                                fontSize: '0.65rem', 
-                                borderColor: '#e07a5f', 
-                                color: b.status === 'Rejected' ? '#fff' : '#e07a5f',
-                                background: b.status === 'Rejected' ? '#e07a5f' : 'transparent'
-                              }}
-                              onClick={() => {
-                                setRejectionTargetId(b.id)
-                                setRejectionNote(b.rejection_message || '')
-                              }}
-                            >
-                              Reject
-                            </button>
-                          </div>
-                        )}
-                      </td>
+                          )}
+                        </td>
+                      )}
                     </tr>
                   ))
                 )}
