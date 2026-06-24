@@ -392,30 +392,8 @@ function MobileAccountScreen({ user, logout, bookings, deleteBooking, setActiveT
 // ─── Main App ────────────────────────────────────────────────────────────────
 export default function App() {
   const { cart, addToCart, bookings, addBooking, deleteBooking, activeTab, setActiveTab, user, setAuthOpen, setCartOpen } = useContext(AppContext)
-  const [gateStatus, setGateStatus] = useState('closed')
-  const [gateVisible, setGateVisible] = useState(true)
   const [isChatOpen, setChatOpen] = useState(false)
   const [mobile, setMobile] = useState(isMobileDevice())
-
-  useEffect(() => {
-    const openTimer = setTimeout(() => {
-      setGateStatus('opened')
-    }, 1500)
-
-    const fadeTimer = setTimeout(() => {
-      setGateStatus('opened fade-out')
-    }, 2800)
-
-    const hideTimer = setTimeout(() => {
-      setGateVisible(false)
-    }, 4000)
-
-    return () => {
-      clearTimeout(openTimer)
-      clearTimeout(fadeTimer)
-      clearTimeout(hideTimer)
-    }
-  }, [])
 
   useEffect(() => {
     const onResize = () => setMobile(isMobileDevice())
@@ -561,20 +539,7 @@ export default function App() {
         </button>
         <ChatDrawer isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
 
-        {gateVisible && (
-          <div className={`fort-gate-overlay ${gateStatus}`}>
-            <div className="gate-door gate-door-left">
-              <div className="gate-medallion">
-                <span className="gate-initial-letter left-initial">K</span>
-              </div>
-            </div>
-            <div className="gate-door gate-door-right">
-              <div className="gate-medallion">
-                <span className="gate-initial-letter right-initial">A</span>
-              </div>
-            </div>
-          </div>
-        )}
+
       </>
     )
   }
@@ -817,20 +782,7 @@ export default function App() {
       </button>
       <ChatDrawer isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
 
-      {gateVisible && (
-        <div className={`fort-gate-overlay ${gateStatus}`}>
-          <div className="gate-door gate-door-left">
-            <div className="gate-medallion">
-              <span className="gate-initial-letter left-initial">K</span>
-            </div>
-          </div>
-          <div className="gate-door gate-door-right">
-            <div className="gate-medallion">
-              <span className="gate-initial-letter right-initial">A</span>
-            </div>
-          </div>
-        </div>
-      )}
+
     </>
   )
 }
