@@ -393,7 +393,7 @@ function MobileAccountScreen({ user, logout, bookings, deleteBooking, setActiveT
 export default function App() {
   const { cart, addToCart, bookings, addBooking, deleteBooking, activeTab, setActiveTab, user, setAuthOpen, setCartOpen } = useContext(AppContext)
   const [gateStatus, setGateStatus] = useState(() => {
-    return sessionStorage.getItem('kesari_gate_opened') === 'true' ? 'opened' : 'closed'
+    return sessionStorage.getItem('kesari_gate_opened') === 'true' ? 'opened fade-out' : 'closed'
   })
   const [gateVisible, setGateVisible] = useState(() => {
     return sessionStorage.getItem('kesari_gate_opened') === 'true' ? false : true
@@ -405,19 +405,24 @@ export default function App() {
     if (sessionStorage.getItem('kesari_gate_opened') !== 'true') {
       const openTimer = setTimeout(() => {
         setGateStatus('opened')
+      }, 2000)
+
+      const fadeTimer = setTimeout(() => {
+        setGateStatus('opened fade-out')
         sessionStorage.setItem('kesari_gate_opened', 'true')
-      }, 500)
+      }, 3500)
 
       const hideTimer = setTimeout(() => {
         setGateVisible(false)
-      }, 2300)
+      }, 4800)
 
       return () => {
         clearTimeout(openTimer)
+        clearTimeout(fadeTimer)
         clearTimeout(hideTimer)
       }
     } else {
-      setGateStatus('opened')
+      setGateStatus('opened fade-out')
       setGateVisible(false)
     }
   }, [])
@@ -567,7 +572,7 @@ export default function App() {
         <ChatDrawer isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
 
         {gateVisible && (
-          <div className={`fort-gate-overlay ${gateStatus === 'opened' ? 'opened' : ''} ${gateStatus === 'opened' ? 'fade-out' : ''}`}>
+          <div className={`fort-gate-overlay ${gateStatus}`}>
             <div className="gate-door gate-door-left">
               <div className="gate-studs-grid">
                 {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
@@ -835,7 +840,7 @@ export default function App() {
       <ChatDrawer isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
 
       {gateVisible && (
-        <div className={`fort-gate-overlay ${gateStatus === 'opened' ? 'opened' : ''} ${gateStatus === 'opened' ? 'fade-out' : ''}`}>
+        <div className={`fort-gate-overlay ${gateStatus}`}>
           <div className="gate-door gate-door-left">
             <div className="gate-studs-grid">
               {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}

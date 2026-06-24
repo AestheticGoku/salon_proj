@@ -3336,4 +3336,17 @@ footer {
     border-top-left-radius: 50% 74px;
     border-top-right-radius: 50% 74px;
   }
+}
+
+.arch-hero-frame h1 {
+  font-size: clamp(3.2rem, 7vw, 6rem);
+  line-height: 1.06;
+  color: var(--ivory) !important;
+  margin-bottom: 0.2em;
+}
+
+@media (max-width: 768px) {
+  .arch-hero-frame h1 {
+    font-size: clamp(2.6rem, 11vw, 3.8rem);
+  }
 }
