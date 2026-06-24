@@ -2999,3 +2999,320 @@ footer {
   padding: 2rem 1.2rem 1.8rem;
   border-bottom: 0.5px solid var(--border-gold);
 }
+
+/* FORT GATE WELCOME OVERLAY */
+.fort-gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  background: #11100f;
+  perspective: 1500px;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.fort-gate-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.gate-door {
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, #181715 0%, #0a0908 100%);
+  border-bottom: 15px solid #2a251e;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+}
+
+.gate-door::after {
+  content: '';
+  position: absolute;
+  top: 6%;
+  bottom: 6%;
+  border: 1px solid rgba(223, 179, 78, 0.25);
+  pointer-events: none;
+}
+
+.gate-door-left::after {
+  left: 12%;
+  right: 6%;
+  border-top-left-radius: 120px 140px;
+}
+
+.gate-door-right::after {
+  left: 6%;
+  right: 12%;
+  border-top-right-radius: 120px 140px;
+}
+
+.gate-door-left {
+  border-right: 4px solid var(--gold);
+  transform-origin: left center;
+}
+
+.gate-door-right {
+  border-left: 4px solid var(--gold);
+  transform-origin: right center;
+}
+
+/* Gold Iron Spikes and Carvings on Doors */
+.gate-studs-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  padding: 4rem 2rem;
+  pointer-events: none;
+}
+
+.gate-stud {
+  width: 14px;
+  height: 14px;
+  background: radial-gradient(circle at 30% 30%, var(--gold-light), var(--gold-dark));
+  border-radius: 50%;
+  margin: auto;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset -1px -1px 3px rgba(0,0,0,0.5);
+}
+
+/* Traditional Brass Ring Handles */
+.gate-handle-ring {
+  position: absolute;
+  top: 50%;
+  width: 60px;
+  height: 60px;
+  border: 5px solid var(--gold);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+}
+
+.gate-door-left .gate-handle-ring {
+  right: 15px;
+}
+
+.gate-door-right .gate-handle-ring {
+  left: 15px;
+}
+
+/* Gate Opening Transitions */
+.fort-gate-overlay.opened .gate-door-left {
+  transform: rotateY(-110deg);
+}
+
+.fort-gate-overlay.opened .gate-door-right {
+  transform: rotateY(110deg);
+}
+
+/* Gate Welcome Content */
+.gate-welcome-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  text-align: center;
+  padding: 2rem;
+  transition: opacity 0.8s ease;
+}
+
+.fort-gate-overlay.opened .gate-welcome-panel {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gate-emblem-container {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(26, 25, 22, 0.9);
+  border: 2px solid var(--gold);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(223,179,78,0.2);
+  animation: pulseGold 3s infinite alternate;
+}
+
+.gate-emblem-container img {
+  width: 90%;
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.gate-welcome-panel h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  color: var(--ivory);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.6);
+}
+
+.gate-welcome-panel p {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gold-light);
+  margin-bottom: 2.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.gate-enter-btn {
+  background: var(--gold);
+  color: var(--white);
+  border: 1px solid var(--border-gold);
+  border-radius: 30px;
+  padding: 0.9rem 2.2rem;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 25px rgba(223,179,78,0.3);
+  transition: all 0.4s ease;
+  animation: pulseButton 2s infinite;
+}
+
+.gate-enter-btn:hover {
+  background: var(--charcoal);
+  color: var(--gold-light);
+  border-color: var(--gold);
+  transform: scale(1.05);
+  box-shadow: 0 6px 30px rgba(223,179,78,0.5);
+}
+
+@keyframes pulseGold {
+  0% { border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  100% { border-color: var(--gold-light); box-shadow: 0 10px 30px rgba(223,179,78,0.3), 0 0 25px rgba(223,179,78,0.4); }
+}
+
+@keyframes pulseButton {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ROYAL MEWARI PALACE ARCHES & ARCHITECTURE styles */
+.palace-arch {
+  position: relative;
+  border-top-left-radius: 50% 120px;
+  border-top-right-radius: 50% 120px;
+  border: 1.5px solid var(--border-gold);
+  background: var(--white);
+  padding: 3.5rem 2.5rem;
+  box-shadow: 0 15px 35px rgba(26,26,24,0.04);
+  overflow: hidden;
+}
+
+.palace-arch::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  border-top-left-radius: 50% 114px;
+  border-top-right-radius: 50% 114px;
+  border: 0.5px dashed var(--gold);
+  pointer-events: none;
+}
+
+/* Scalloped Arch Hero Frame */
+.arch-hero-frame {
+  position: relative;
+  border-top-left-radius: 50% 140px;
+  border-top-right-radius: 50% 140px;
+  border: 2px solid var(--border-gold);
+  border-bottom: none;
+  background: linear-gradient(rgba(26,26,24,0.3), rgba(26,26,24,0.75)), url('/images/spa_retreat.png') no-repeat center center;
+  background-size: cover;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 2rem;
+  box-shadow: inset 0 -50px 100px rgba(26,26,24,0.8);
+  margin-top: 1.5rem;
+}
+
+.arch-hero-frame::before {
+  content: '';
+  position: absolute;
+  top: 8px; left: 8px; right: 8px; bottom: 0;
+  border-top-left-radius: 50% 132px;
+  border-top-right-radius: 50% 132px;
+  border: 0.75px dashed rgba(223,179,78,0.5);
+  border-bottom: none;
+  pointer-events: none;
+}
+
+/* Palace Jharokha Card Design */
+.jharokha-card {
+  position: relative;
+  border-top-left-radius: 50% 60px;
+  border-top-right-radius: 50% 60px;
+  border: 1px solid var(--border-gold);
+  background: var(--white);
+  padding: 2.2rem 1.5rem 1.8rem;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(26,26,24,0.03);
+  transition: all 0.4s ease;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.jharokha-card::before {
+  content: '';
+  position: absolute;
+  top: 5px; left: 5px; right: 5px; bottom: 5px;
+  border-top-left-radius: 50% 55px;
+  border-top-right-radius: 50% 55px;
+  border: 0.5px dashed rgba(223,179,78,0.3);
+  pointer-events: none;
+  transition: border-color 0.4s;
+}
+
+.jharokha-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(223,179,78,0.15);
+  border-color: var(--gold);
+}
+
+.jharokha-card:hover::before {
+  border-color: rgba(223,179,78,0.6);
+}
+
+/* Mobile responsive fixes for arches */
+@media (max-width: 768px) {
+  .palace-arch {
+    border-top-left-radius: 50% 70px;
+    border-top-right-radius: 50% 70px;
+    padding: 2.2rem 1.2rem;
+  }
+  .palace-arch::before {
+    border-top-left-radius: 50% 65px;
+    border-top-right-radius: 50% 65px;
+  }
+
+  .arch-hero-frame {
+    border-top-left-radius: 50% 80px;
+    border-top-right-radius: 50% 80px;
+    min-height: 420px;
+  }
+  .arch-hero-frame::before {
+    border-top-left-radius: 50% 74px;
+    border-top-right-radius: 50% 74px;
+  }
+}

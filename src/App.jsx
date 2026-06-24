@@ -392,8 +392,22 @@ function MobileAccountScreen({ user, logout, bookings, deleteBooking, setActiveT
 // ─── Main App ────────────────────────────────────────────────────────────────
 export default function App() {
   const { cart, addToCart, bookings, addBooking, deleteBooking, activeTab, setActiveTab, user, setAuthOpen, setCartOpen } = useContext(AppContext)
+  const [gateStatus, setGateStatus] = useState(() => {
+    return sessionStorage.getItem('kesari_gate_opened') === 'true' ? 'opened' : 'closed'
+  })
+  const [gateVisible, setGateVisible] = useState(() => {
+    return sessionStorage.getItem('kesari_gate_opened') === 'true' ? false : true
+  })
   const [isChatOpen, setChatOpen] = useState(false)
   const [mobile, setMobile] = useState(isMobileDevice())
+
+  const handleEnterPalace = () => {
+    setGateStatus('opened')
+    sessionStorage.setItem('kesari_gate_opened', 'true')
+    setTimeout(() => {
+      setGateVisible(false)
+    }, 1800)
+  }
 
   useEffect(() => {
     const onResize = () => setMobile(isMobileDevice())
@@ -538,6 +552,33 @@ export default function App() {
           Concierge
         </button>
         <ChatDrawer isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
+
+        {gateVisible && (
+          <div className={`fort-gate-overlay ${gateStatus === 'opened' ? 'opened' : ''} ${gateStatus === 'opened' ? 'fade-out' : ''}`}>
+            <div className="gate-door gate-door-left">
+              <div className="gate-studs-grid">
+                {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
+              </div>
+              <div className="gate-handle-ring"></div>
+            </div>
+            <div className="gate-door gate-door-right">
+              <div className="gate-studs-grid">
+                {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
+              </div>
+              <div className="gate-handle-ring"></div>
+            </div>
+            <div className="gate-welcome-panel">
+              <div className="gate-emblem-container">
+                <img src="/images/kesari_atelier_logo.png" alt="Kesari Atelier Logo" />
+              </div>
+              <h2>KESARI ATELIER</h2>
+              <p>Udaipur Heritage Spa & Salon</p>
+              <button className="gate-enter-btn" onClick={handleEnterPalace}>
+                Enter the Palace
+              </button>
+            </div>
+          </div>
+        )}
       </>
     )
   }
@@ -603,14 +644,14 @@ export default function App() {
         </section>
       ) : (
         <main className="view-container">
-          <section className="hero">
+          <section className="arch-hero-frame">
             <div style={{ animation: 'fadeIn 1s ease' }}>
               <span className="hero-ornament">City of Lakes · Udaipur, Rajasthan</span>
               <h1>Where <em>Heritage</em><br />Meets Ritual</h1>
-              <p className="hero-sub">Luxury spa sanctuaries, heritage salon artistry, and elite bridal ceremonies — curated for the discerning.</p>
+              <p className="hero-sub" style={{ color: 'rgba(250,248,243,0.85)' }}>Luxury spa sanctuaries, heritage salon artistry, and elite bridal ceremonies — curated for the discerning.</p>
               <div className="hero-actions">
                 <button className="btn-primary" onClick={() => handleScrollToSection('booking')}>Book an Experience</button>
-                <button className="btn-ghost" onClick={() => handleScrollToSection('services')}>Explore Offerings</button>
+                <button className="btn-ghost" style={{ borderColor: 'rgba(250,248,243,0.5)', color: '#FFF' }} onClick={() => handleScrollToSection('services')}>Explore Offerings</button>
               </div>
               {bookings.length > 0 && (
                 <button className="btn-outline" style={{ marginTop: '2.5rem', display: 'inline-block' }} onClick={() => setActiveTab('bookings')}>
@@ -628,13 +669,13 @@ export default function App() {
             </div>
             <div className="services-grid">
               {Object.entries(services).map(([key, svc]) => (
-                <div className="service-card" key={key} onClick={() => setActiveModalService(key)}>
-                  <span className="service-icon">✦</span>
+                <div className="jharokha-card" key={key} onClick={() => setActiveModalService(key)}>
+                  <span className="service-icon" style={{ display: 'block', fontSize: '1.5rem', color: 'var(--gold)', marginBottom: '1rem' }}>✦</span>
                   <h3>{svc.title}</h3>
                   <p>{svc.desc}</p>
-                  <div className="service-from">From</div>
-                  <div className="service-price">{svc.price.replace('From ', '')}</div>
-                  <a className="service-link" href="#" onClick={e => e.preventDefault()}>Discover packages</a>
+                  <div className="service-from" style={{ fontSize: '0.62rem', letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--charcoal-soft)', marginTop: '1.2rem' }}>From</div>
+                  <div className="service-price" style={{ fontFamily: 'Cormorant Garamond', fontSize: '1.8rem', color: 'var(--gold)', margin: '0.2rem 0 0.8rem' }}>{svc.price.replace('From ', '')}</div>
+                  <a className="service-link" href="#" onClick={e => e.preventDefault()} style={{ fontSize: '0.68rem', letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--gold)', textDecoration: 'none', fontWeight: 500 }}>Discover packages</a>
                 </div>
               ))}
             </div>
@@ -655,7 +696,7 @@ export default function App() {
             </div>
           </section>
 
-          <section className="bridal" id="bridal">
+          <section className="bridal palace-arch" id="bridal">
             <div className="divider"><div className="divider-diamond"></div></div>
             <div className="bridal-inner">
               <div className="bridal-text">
@@ -681,7 +722,7 @@ export default function App() {
             </div>
           </section>
 
-          <section className="booking-section" id="booking">
+          <section className="booking-section palace-arch" id="booking">
             <div className="booking-inner">
               <div className="booking-header">
                 <span className="section-eyebrow">Reserve Your Visit</span>
@@ -779,6 +820,33 @@ export default function App() {
         Chat Concierge
       </button>
       <ChatDrawer isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
+
+      {gateVisible && (
+        <div className={`fort-gate-overlay ${gateStatus === 'opened' ? 'opened' : ''} ${gateStatus === 'opened' ? 'fade-out' : ''}`}>
+          <div className="gate-door gate-door-left">
+            <div className="gate-studs-grid">
+              {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
+            </div>
+            <div className="gate-handle-ring"></div>
+          </div>
+          <div className="gate-door gate-door-right">
+            <div className="gate-studs-grid">
+              {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
+            </div>
+            <div className="gate-handle-ring"></div>
+          </div>
+          <div className="gate-welcome-panel">
+            <div className="gate-emblem-container">
+              <img src="/images/kesari_atelier_logo.png" alt="Kesari Atelier Logo" />
+            </div>
+            <h2>KESARI ATELIER</h2>
+            <p>Udaipur Heritage Spa & Salon</p>
+            <button className="gate-enter-btn" onClick={handleEnterPalace}>
+              Enter the Palace
+            </button>
+          </div>
+        </div>
+      )}
     </>
   )
 }
