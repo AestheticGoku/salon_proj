@@ -1456,11 +1456,20 @@ nav.desktop-nav {
   white-space: nowrap;
 }
 
+@keyframes goldDust {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .timeline-node:hover .instabook-badge {
-  background: var(--gold);
-  color: var(--white);
-  border-color: var(--gold);
-  box-shadow: 0 2px 8px rgba(201, 168, 76, 0.3);
+  color: var(--charcoal);
+  border-color: var(--gold-light);
+  background: linear-gradient(135deg, #e5c060 25%, #f3e5ab 50%, #c9a84c 75%);
+  background-size: 200% 200%;
+  animation: goldDust 3s ease infinite;
+  box-shadow: 0 0 15px rgba(229, 192, 96, 0.6);
+  font-weight: 600;
 }
 
 .vertical-timeline::before {

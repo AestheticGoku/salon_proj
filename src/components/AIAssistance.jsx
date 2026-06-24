@@ -6,7 +6,7 @@ const API_BASE_URL = window.location.hostname !== 'salonproj-production.up.railw
   : 'https://salonproj-production.up.railway.app/api';
 
 export default function AIAssistance() {
-  const { addToCart, addBooking, triggerBookingPrefill } = useContext(AppContext)
+  const { user, addToCart, addBooking, triggerBookingPrefill } = useContext(AppContext)
   const [isOpen, setOpen] = useState(false)
   const [mode, setMode] = useState(null) // null: Welcome/Menu, 'advisor': AI Advisor Quiz, 'planner': AI Planner
   const [step, setStep] = useState(0) // 0: Name, 1: Goal, 2: Skin, 3: Duration, 4: Result (for AI Advisor)
@@ -139,10 +139,15 @@ export default function AIAssistance() {
     setIsAddedToCart(false)
     setIsBooked(false)
     try {
+      const guestName = user ? user.name.split(' ')[0] : ''
+      const payloadPrompt = guestName 
+        ? `Greet and address the guest as "${guestName}". ${plannerPrompt}`
+        : plannerPrompt
+        
       const response = await fetch(`${API_BASE_URL}/ai-occasion-planner`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: plannerPrompt })
+        body: JSON.stringify({ prompt: payloadPrompt })
       })
 
       if (response.ok) {
