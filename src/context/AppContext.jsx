@@ -2,9 +2,7 @@ import React, { createContext, useState, useEffect } from 'react'
 
 export const AppContext = createContext()
 
-const API_BASE_URL = window.location.hostname !== 'salonproj-production.up.railway.app'
-  ? `http://${window.location.hostname || 'localhost'}:8000/api`
-  : 'https://salonproj-production.up.railway.app/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'
 
 export const AppProvider = ({ children }) => {
   // Load logged in user on session start
