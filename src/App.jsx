@@ -392,38 +392,28 @@ function MobileAccountScreen({ user, logout, bookings, deleteBooking, setActiveT
 // ─── Main App ────────────────────────────────────────────────────────────────
 export default function App() {
   const { cart, addToCart, bookings, addBooking, deleteBooking, activeTab, setActiveTab, user, setAuthOpen, setCartOpen } = useContext(AppContext)
-  const [gateStatus, setGateStatus] = useState(() => {
-    return sessionStorage.getItem('kesari_gate_opened') === 'true' ? 'opened fade-out' : 'closed'
-  })
-  const [gateVisible, setGateVisible] = useState(() => {
-    return sessionStorage.getItem('kesari_gate_opened') === 'true' ? false : true
-  })
+  const [gateStatus, setGateStatus] = useState('closed')
+  const [gateVisible, setGateVisible] = useState(true)
   const [isChatOpen, setChatOpen] = useState(false)
   const [mobile, setMobile] = useState(isMobileDevice())
 
   useEffect(() => {
-    if (sessionStorage.getItem('kesari_gate_opened') !== 'true') {
-      const openTimer = setTimeout(() => {
-        setGateStatus('opened')
-      }, 2000)
+    const openTimer = setTimeout(() => {
+      setGateStatus('opened')
+    }, 1500)
 
-      const fadeTimer = setTimeout(() => {
-        setGateStatus('opened fade-out')
-        sessionStorage.setItem('kesari_gate_opened', 'true')
-      }, 3500)
-
-      const hideTimer = setTimeout(() => {
-        setGateVisible(false)
-      }, 4800)
-
-      return () => {
-        clearTimeout(openTimer)
-        clearTimeout(fadeTimer)
-        clearTimeout(hideTimer)
-      }
-    } else {
+    const fadeTimer = setTimeout(() => {
       setGateStatus('opened fade-out')
+    }, 2800)
+
+    const hideTimer = setTimeout(() => {
       setGateVisible(false)
+    }, 4000)
+
+    return () => {
+      clearTimeout(openTimer)
+      clearTimeout(fadeTimer)
+      clearTimeout(hideTimer)
     }
   }, [])
 
@@ -577,20 +567,19 @@ export default function App() {
               <div className="gate-studs-grid">
                 {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
               </div>
-              <div className="gate-medallion"></div>
+              <div className="gate-medallion">
+                <span className="gate-initial-letter left-initial">K</span>
+              </div>
               <div className="gate-handle-ring"></div>
             </div>
             <div className="gate-door gate-door-right">
               <div className="gate-studs-grid">
                 {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
               </div>
-              <div className="gate-medallion"></div>
-              <div className="gate-handle-ring"></div>
-            </div>
-            <div className="gate-welcome-panel">
-              <div className="gate-emblem-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span className="gate-initials">KA</span>
+              <div className="gate-medallion">
+                <span className="gate-initial-letter right-initial">A</span>
               </div>
+              <div className="gate-handle-ring"></div>
             </div>
           </div>
         )}
@@ -842,20 +831,19 @@ export default function App() {
             <div className="gate-studs-grid">
               {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
             </div>
-            <div className="gate-medallion"></div>
+            <div className="gate-medallion">
+              <span className="gate-initial-letter left-initial">K</span>
+            </div>
             <div className="gate-handle-ring"></div>
           </div>
           <div className="gate-door gate-door-right">
             <div className="gate-studs-grid">
               {Array.from({ length: 16 }).map((_, i) => <div key={i} className="gate-stud"></div>)}
             </div>
-            <div className="gate-medallion"></div>
-            <div className="gate-handle-ring"></div>
-          </div>
-          <div className="gate-welcome-panel">
-            <div className="gate-emblem-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span className="gate-initials">KA</span>
+            <div className="gate-medallion">
+              <span className="gate-initial-letter right-initial">A</span>
             </div>
+            <div className="gate-handle-ring"></div>
           </div>
         </div>
       )}

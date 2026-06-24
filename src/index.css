@@ -3008,6 +3008,7 @@ footer {
   display: flex;
   background: #11100f;
   perspective: 1500px;
+  transform-style: preserve-3d;
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
@@ -3029,8 +3030,11 @@ footer {
   position: relative;
   display: flex;
   flex-direction: column;
-  transition: transform 2.2s cubic-bezier(0.77, 0, 0.175, 1);
+  transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
   box-shadow: inset 0 0 100px rgba(0,0,0,0.95);
+  transform: rotateY(0deg);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .gate-door::after {
@@ -3131,21 +3135,7 @@ footer {
 }
 
 .gate-medallion::after {
-  content: '☀';
-  font-size: 5rem;
-  color: var(--gold);
-  text-shadow: 0 0 20px rgba(223, 179, 78, 0.7);
-  line-height: 1;
-  font-family: 'Cormorant Garamond', serif;
-  opacity: 0.9;
-}
-
-.gate-door-left .gate-medallion::after {
-  transform: translateX(25px);
-}
-
-.gate-door-right .gate-medallion::after {
-  transform: translateX(-25px);
+  content: '';
 }
 
 /* Traditional Brass Ring Handles */
@@ -3430,4 +3420,27 @@ footer {
   text-shadow: 0 0 15px rgba(223, 179, 78, 0.4);
   line-height: 1;
   text-align: center;
+}
+
+/* Door Mounted Initials KA Styles */
+.gate-initial-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5.5rem;
+  font-weight: 300;
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(223, 179, 78, 0.5);
+  line-height: 1;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  user-select: none;
+  z-index: 10;
+}
+
+.left-initial {
+  right: 32px;
+}
+
+.right-initial {
+  left: 32px;
 }
