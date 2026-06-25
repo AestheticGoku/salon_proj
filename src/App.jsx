@@ -15,13 +15,13 @@ function MobileHomeScreen({ onNavigate, bookings, setActiveTab }) {
   return (
     <div className="mobile-screen" style={{ animation: 'fadeIn 0.3s' }}>
       {/* Hero strip — dark arch-inspired background */}
-      <div className="mobile-hero">
+      <div className="mobile-hero" style={{ backgroundImage: `linear-gradient(170deg, rgba(17,16,15,0.65) 0%, rgba(17,16,15,0.82) 100%), url('/images/spa_retreat.png')`, backgroundSize: 'cover', backgroundPosition: 'center center', minHeight: '420px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '2.4rem 1.4rem 2.2rem' }}>
         <span className="hero-ornament">City of Lakes · Udaipur, Rajasthan</span>
-        <h1 style={{ fontSize: 'clamp(2.4rem, 10vw, 3.2rem)', lineHeight: 1.08 }}>Where <em>Heritage</em><br />Meets Ritual</h1>
+        <h1 style={{ fontSize: 'clamp(2rem, 8vw, 2.8rem)', lineHeight: 1.1, color: 'var(--ivory)' }}>Where <em>Heritage</em><br />Meets Ritual</h1>
         <p style={{ fontSize: '0.8rem', letterSpacing: '0.06em', marginTop: '0.8rem', lineHeight: 1.75 }}>
           Luxury spa sanctuaries, heritage artistry &amp; elite bridal ceremonies.
         </p>
-        <div style={{ display: 'flex', gap: '0.8rem', marginTop: '1.8rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '0.8rem', marginTop: '1.4rem', flexWrap: 'wrap', width: '100%' }}>
           <button className="btn-primary" style={{ flex: 1, padding: '0.95rem 1rem', fontSize: '0.68rem' }} onClick={() => onNavigate('book')}>Book an Experience</button>
           <button className="btn-ghost" style={{ flex: 1, padding: '0.95rem 1rem', fontSize: '0.68rem' }} onClick={() => onNavigate('rituals')}>Explore Offerings</button>
         </div>
@@ -527,18 +527,14 @@ export default function App() {
         )}
 
         <BoutiqueCart />
-        {(!user || (!user.isAdmin && !user.isStaff)) && (
-          <>
-            <AIAssistance />
-            <button className="chat-concierge-btn" onClick={() => setChatOpen(true)}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-              Concierge
-            </button>
-            <ChatDrawer isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
-          </>
-        )}
+        <AIAssistance />
+        <button className="chat-concierge-btn" onClick={() => setChatOpen(true)}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          Concierge
+        </button>
+        <ChatDrawer isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
 
 
       </>
@@ -774,18 +770,14 @@ export default function App() {
       )}
 
       <BoutiqueCart />
-      {(!user || (!user.isAdmin && !user.isStaff)) && (
-        <>
-          <AIAssistance />
-          <button className="chat-concierge-btn" onClick={() => setChatOpen(true)}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-            Chat Concierge
-          </button>
-          <ChatDrawer isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
-        </>
-      )}
+      <AIAssistance />
+      <button className="chat-concierge-btn" onClick={() => setChatOpen(true)}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        Chat Concierge
+      </button>
+      <ChatDrawer isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
 
 
     </>
