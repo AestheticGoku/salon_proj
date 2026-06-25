@@ -91,6 +91,9 @@ uvicorn main:app --reload --port 8000
 # Build the frontend
 npm run build
 
+#to build android folder(first time)
+npx cap add android
+
 # Sync with Capacitor
 npx cap sync android
 
